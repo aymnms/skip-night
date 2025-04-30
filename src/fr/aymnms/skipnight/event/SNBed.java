@@ -10,21 +10,43 @@ import org.bukkit.event.Listener;
 
 public class SNBed implements Listener
 {
-    private SNMain main;
+    private final SNMain main;
 
     public SNBed(final SNMain main) {
         this.main = main;
     }
 
     @EventHandler
-    public void joinBed(final PlayerBedEnterEvent e) {
+    public void joinBedEvent(final PlayerBedEnterEvent e) {
         final Player p = e.getPlayer();
+        joinBed(p);
+        skipNight(p);
+    }
 
-        // if not night or not thundering -> stop
+    @EventHandler
+    public void leaveBedEvent(final PlayerBedLeaveEvent e) {
+        Player p = e.getPlayer();
+        leaveBed(p);
+    }
+
+    public void leaveBed(final Player p){
+        final int playerLimit = Bukkit.getServer().getOnlinePlayers().size() / 2;
+
+        this.main.getPB().remove(p);
+        System.out.println("leave: Bedlist: " + this.main.getPB());
+
+        if (this.main.getPB().isEmpty()) {
+            Bukkit.broadcastMessage("§8[§rSkip§9Night§8] §7Nobody wants to go to bed anymore!");
+        } else {
+            Bukkit.broadcastMessage("§8§l" + p.getName() + " §r§7has just left the bed §8[§9§l" + this.main.getPB().size() + "§8/§f" + playerLimit + "]");
+        }
+    }
+
+    public void joinBed(Player p) {
         if (p.getWorld().getTime() < 12000L && !p.getWorld().isThundering())
             return;
 
-        final int playerLimit = Bukkit.getServer().getOnlinePlayers().size() / 2;
+        final int playerLimit = Math.max(1, Bukkit.getServer().getOnlinePlayers().size() / 2);
 
         if (!this.main.getPB().contains(p))
             this.main.getPB().add(p);
@@ -32,33 +54,21 @@ public class SNBed implements Listener
         System.out.println("join: Bedlist: " + this.main.getPB());
 
         if (this.main.getPB().size() == 1)
-            Bukkit.broadcastMessage("§8[§rSkip§9Night§8] §9" + this.main.getPB().get(0).getName() + " §r§7souhaite faire passer la nuit §8[§9§l" + this.main.getPB().size() + "§8/§f" + playerLimit + "]");
+            Bukkit.broadcastMessage("§8[§rSkip§9Night§8] §9" + this.main.getPB().get(0).getName() + " §r§would to skip the night §8[§9§l" + this.main.getPB().size() + "§8/§f" + playerLimit + "]");
         else if (this.main.getPB().size() > 1)
-            Bukkit.broadcastMessage("§8[§rSkip§9Night§8] §9" + p.getName() + " §7vient de rejoindre le lit §8[§9§l" + this.main.getPB().size() + "§8/§f" + playerLimit + "]");
-
-        if (this.main.getPB().size() >= playerLimit) {
-            Bukkit.broadcastMessage("§8[§rSkip§9Night§8] §7Le jour se l\u00e8ve.");
-            Bukkit.getWorld("world").setTime(0L);
-            this.main.getPB().clear();
-        }
+            Bukkit.broadcastMessage("§8[§rSkip§9Night§8] §9" + p.getName() + " §7has just gone to bed §8[§9§l" + this.main.getPB().size() + "§8/§f" + playerLimit + "]");
     }
 
-    @EventHandler
-    public void leaveBed(final PlayerBedLeaveEvent e) {
-        final Player p = e.getPlayer();
-        final int yay = Bukkit.getServer().getOnlinePlayers().size() / 2;
+    public void skipNight(Player p) {
+        if (p.getWorld().getTime() < 12000L && !p.getWorld().isThundering())
+            return;
 
-        if (p.getWorld().getTime() > 12000L || p.getWorld().isThundering()){
-            if (this.main.getPB().contains(p))
-                this.main.getPB().remove(p);
+        final int playerLimit = Math.max(1, Bukkit.getServer().getOnlinePlayers().size() / 2);
 
-            System.out.println("leave: Bedlist: " + this.main.getPB());
-
-            if (this.main.getPB().size() == 0 && (p.getWorld().getTime() > 12000L || p.getWorld().isThundering()))
-                Bukkit.broadcastMessage("§8[§rSkip§9Night§8] §7Plus personne ne souhaite se coucher !");
-            else if (SNMain.getInstance().getPB().size() > 0 && p.getWorld().getTime() > 12000L)
-                Bukkit.broadcastMessage("§8§l" + p.getName() + " §r§7vient de quitter le lit §8[§9§l" + this.main.getPB().size() + "§8/§f" + yay + "]");
+        if (this.main.getPB().size() >= playerLimit) {
+            Bukkit.broadcastMessage("§8[§rSkip§9Night§8] §7The sun rises.");
+            p.getWorld().setTime(0L);
+            this.main.getPB().clear();
         }
-
     }
 }

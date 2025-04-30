@@ -11,7 +11,20 @@ public class SNMain extends JavaPlugin implements Listener
     private ArrayList<Player> PlayerBed;
 
     public SNMain() {
-        this.PlayerBed = new ArrayList<Player>();
+        String version = getServer().getBukkitVersion();
+        String[] parts = version.split("\\.");
+        try {
+            int major = Integer.parseInt(parts[0]);
+            int minor = Integer.parseInt(parts[1].split("-")[0]);
+            if ((major == 1 && minor >= 17) || major > 1) {
+                getLogger().warning("This plugin is no longer required with the playersSleepingPercentage gamerule.");
+                getServer().getPluginManager().disablePlugin(this);
+            }
+        } catch (Exception e) {
+            getLogger().warning("Unable to read Minecraft version. The plugin is activated by default.");
+        }
+
+        this.PlayerBed = new ArrayList<>();
     }
 
     public static SNMain getInstance() {
