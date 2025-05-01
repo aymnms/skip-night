@@ -2,6 +2,8 @@
 
 <!-- PROJECT SHIELDS -->
 [![Contributors][contributors-shield]][contributors-url]
+[![SpigotMC](https://img.shields.io/badge/SpigotMC-SkipNight-orange?style=for-the-badge&logo=spigotmc)](https://www.spigotmc.org/resources/skipnight.124609/)
+[![Modrinth](https://img.shields.io/badge/Modrinth-SkipNight-brightgreen?style=for-the-badge&logo=modrinth)](https://modrinth.com/plugin/skipnight)
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
@@ -9,16 +11,23 @@
 
 <br />
 <div align="center">
+  <a href="https://github.com/aymnms/skip-night">
+    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  </a>
   <h3 align="center">SkipNight</h3>
   <p align="center">
     A Minecraft plugin that lets you skip the night even if not everyone is sleeping.
     <br />
-    <a href="https://github.com/aymnms/skip-night"><strong>View the code »</strong></a>
     <br />
+    <a href="https://github.com/aymnms/skip-night"><strong>View the code »</strong></a>
     <br />
     <a href="https://github.com/aymnms/skip-night/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     ·
     <a href="https://github.com/aymnms/skip-night/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <br />
+    <br />
+    🌙 <a href="https://www.spigotmc.org/resources/skipnight.124609/">View on SpigotMC</a> ·
+    🟩 <a href="https://modrinth.com/plugin/skipnight">View on Modrinth</a>  
   </p>
 </div>
 
